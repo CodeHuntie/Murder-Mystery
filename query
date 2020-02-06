@@ -1,0 +1,38 @@
+############## Get the type of report 
+SELECT * FROM crime_scene_report 
+WHERE type = 'murder' 
+AND city = 'SQL City';
+
+######## Identify 2 witnesses 
+SELECT *
+FROM person 
+WHERE address_street_name like 'Northwestern %'
+ORDER BY address_number DESC LIMIT 1;
+
+SELECT *
+FROM person 
+WHERE address_street_name like 'Franklin Ave%'
+and name like 'Annabel%';
+
+######### Find the transcript from 2 witnesses 
+SELECT id, name, transcript
+FROM interview i
+JOIN person p
+  ON i.person_id = p.id 
+WHERE id = 14887 OR id = 16371;
+
+
+######## Identify the murderer ! 
+SELECT DISTINCT p.id, p.name, membership_status, g.id, check_in_date, plate_number
+FROM get_fit_now_member g
+JOIN get_fit_now_check_in a 
+ON a.membership_id = g.id 
+JOIN person p
+ON p.id = g.person_id
+JOIN drivers_license d
+ON d.id = p.license_id
+WHERE membership_status LIKE '%gold%' and g.id LIKE '%48Z%'
+and check_in_date = 20180109;
+
+
+## 67318	Jeremy Bowers is the murderer 
